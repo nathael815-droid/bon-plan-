@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bons Plan 💙</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f7ff;color:#183153}
+header{background:#fff;padding:22px 16px;border-bottom:1px solid #dbeafe}
+h1{color:#2563eb;margin:0}
+main{max-width:900px;margin:auto;padding:18px}
+.hero{background:#dbeafe;padding:22px;border-radius:16px}
+input{width:100%;padding:13px;border:1px solid #bfdbfe;border-radius:10px;font-size:16px}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
+button,.link{border:0;border-radius:9px;padding:11px 13px;background:#2563eb;color:white;cursor:pointer;text-decoration:none}
+button.active{background:#183153}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.card{background:white;border:1px solid #dbeafe;border-radius:14px;padding:17px}
+.tag{color:#2563eb;font-size:13px;font-weight:bold}
+.price{font-weight:bold;margin:12px 0}
+small,footer{color:#64748b;line-height:1.5}
+</style>
+</head>
+<body>
+<header>
+<h1>💙 Bons Plan</h1>
+<p>Les bonnes affaires, au bon endroit !</p>
+</header>
+<main>
+<section class="hero">
+<h2>🔥 Trouve ton prochain bon plan</h2>
+<p>Explore nos catégories et compare les offres.</p>
+<input id="search" placeholder="Rechercher un produit...">
+</section>
+<nav id="categories">
+<button class="active" data-cat="Tout">Tout</button>
+<button data-cat="Téléphones">📱 Téléphones</button>
+<button data-cat="Gaming">🎮 Gaming</button>
+<button data-cat="Mode">👟 Mode</button>
+<button data-cat="Petit prix">💸 Petit prix</button>
+</nav>
+<h2>Nos sélections</h2>
+<div id="offers" class="grid"></div>
+<p><small>Exemples de démonstration : les prix et promotions sont à vérifier auprès des boutiques.</small></p>
+<footer>
+Les liens d'affiliation seront signalés clairement. Le site peut recevoir une commission sur certains achats admissibles.
+</footer>
+</main>
+<script>
+const offers=[
+{name:"Accessoires téléphone",cat:"Téléphones",price:"Prix à vérifier",desc:"Compare les coques et les chargeurs.",url:"https://www.amazon.fr/"},
+{name:"Accessoires gaming",cat:"Gaming",price:"Prix à vérifier",desc:"Découvre les accessoires de jeu.",url:"https://www.amazon.fr/"},
+{name:"Mode et chaussures",cat:"Mode",price:"Prix à vérifier",desc:"Recherche les offres de vêtements.",url:"https://www.amazon.fr/"},
+{name:"Petits prix",cat:"Petit prix",price:"Prix à vérifier",desc:"Trouve des idées adaptées à ton budget.",url:"https://www.amazon.fr/"}
+];
+let category="Tout";
+const grid=document.getElementById("offers");
+const search=document.getElementById("search");
+function render(){
+const q=search.value.toLowerCase();
+const list=offers.filter(o=>(category==="Tout"||o.cat===category)&&(o.name+" "+o.cat+" "+o.desc).toLowerCase().includes(q));
+grid.replaceChildren();
+list.forEach(o=>{
+const c=document.createElement("article");c.className="card";
+const t=document.createElement("div");t.className="tag";t.textContent=o.cat;
+const h=document.createElement("h3");h.textContent=o.name;
+const d=document.createElement("p");d.textContent=o.desc;
+const p=document.createElement("div");p.className="price";p.textContent=o.price;
+const a=document.createElement("a");a.className="link";a.href=o.url;a.target="_blank";a.rel="noopener noreferrer";a.textContent="Voir la boutique";
+c.append(t,h,d,p,a);grid.append(c);
+});
+if(!list.length)grid.textContent="Aucun résultat.";
+}
+document.querySelectorAll("[data-cat]").forEach(b=>b.addEventListener("click",()=>{
+category=b.dataset.cat;
+document.querySelectorAll("[data-cat]").forEach(x=>x.classList.toggle("active",x===b));
+render();
+}));
+search.addEventListener("input",render);
+render();
+</script>
+</body>
+</html>
